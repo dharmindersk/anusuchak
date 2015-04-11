@@ -1,0 +1,10 @@
+﻿<Attributes>
+   <Attibute>
+    <Name>recipient_list</Name>
+    <Value>dharminder@tavisca.com</Value>
+  </Attibute>
+  <Attibute>
+    <Name>email_message</Name>
+    <Value>some custom data</Value>
+  </Attibute>
+</Attributes>

@@ -1,0 +1,6 @@
+﻿<appSchedule>
+  <task name="Task1" time="03/17/2009 12:00" repeat="H" />
+  <task name="Task2" time="03/19/2009 12:00" repeat="W" />
+  <task name="Task3" time="03/29/2009 12:00" repeat="D" />
+  <task name="Task5" time="03/21/2009 19:00" repeat="M" />
+</appSchedule>

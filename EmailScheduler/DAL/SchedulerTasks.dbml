@@ -1,0 +1,179 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="Anusuchak" Class="SchedulerTasksDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=.;Initial Catalog=Anusuchak;Integrated Security=True" SettingsObjectName="EmailScheduler.Properties.Settings" SettingsPropertyName="AnusuchakConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.Attributes" Member="Attributes">
+    <Type Name="Attribute">
+      <Column Name="task_id" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="attr_name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="attr_value" Type="System.String" DbType="NVarChar(512) NOT NULL" CanBeNull="false" />
+      <Association Name="Task_Attribute" Member="Task" ThisKey="task_id" OtherKey="id" Type="Task" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Account" Member="Accounts">
+    <Type Name="Account">
+      <Column Name="id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="username" Type="System.String" DbType="NVarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="password" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="email" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="enabled" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="added_on" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="Account_Task" Member="Tasks" ThisKey="username" OtherKey="owner" Type="Task" />
+      <Association Name="Account_UserSession" Member="UserSessions" ThisKey="username" OtherKey="username" Type="UserSession" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Tasks" Member="Tasks">
+    <Type Name="Task">
+      <Column Name="id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="owner" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="tasktype" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="title" Type="System.String" DbType="NVarChar(128) NOT NULL" CanBeNull="false" />
+      <Column Name="status" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="scheduled_time" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="frequency" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="added_on" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="Task_Attribute" Member="Attributes" ThisKey="id" OtherKey="task_id" Type="Attribute" />
+      <Association Name="Account_Task" Member="Account" ThisKey="owner" OtherKey="username" Type="Account" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.UserSession" Member="UserSessions">
+    <Type Name="UserSession">
+      <Column Name="username" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="session_data" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="apikey" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="add_date" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="Account_UserSession" Member="Account" ThisKey="username" OtherKey="username" Type="Account" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Function Name="dbo.spCreateUserSession" Method="spCreateUserSession">
+    <Parameter Name="username" Type="System.String" DbType="NVarChar(50)" />
+    <Parameter Name="session_data" Type="System.String" DbType="VarChar(50)" />
+    <Parameter Name="api_key" Type="System.String" DbType="VarChar(50)" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.spUpdateTasks" Method="spUpdateTasks">
+    <Parameter Name="id" Type="System.Int64" DbType="BigInt" />
+    <Parameter Name="owner" Type="System.String" DbType="NVarChar(50)" />
+    <Parameter Name="tasktype" Type="System.String" DbType="NVarChar(50)" />
+    <Parameter Name="title" Type="System.String" DbType="NVarChar(128)" />
+    <Parameter Name="status" Type="System.String" DbType="NVarChar(50)" />
+    <Parameter Name="scheduled_time" Type="System.DateTime" DbType="DateTime" />
+    <Parameter Name="frequency" Type="System.String" DbType="NVarChar(50)" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.spDeleteAccount" Method="spDeleteAccount">
+    <Parameter Name="username" Type="System.String" DbType="NVarChar(50)" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.spDeleteByTasksOwner" Method="spDeleteByTasksOwner">
+    <Parameter Name="owner" Type="System.String" DbType="NVarChar(50)" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.spDeleteTasks" Method="spDeleteTasks">
+    <Parameter Name="id" Type="System.Int64" DbType="BigInt" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.spDeleteUserSession" Method="spDeleteUserSession">
+    <Parameter Name="username" Type="System.String" DbType="NVarChar(50)" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.spInsertAccount" Method="spInsertAccount">
+    <Parameter Name="username" Type="System.String" DbType="NVarChar(50)" />
+    <Parameter Name="password" Type="System.String" DbType="NVarChar(50)" />
+    <Parameter Name="email" Type="System.String" DbType="NVarChar(50)" />
+    <Parameter Name="enabled" Type="System.Boolean" DbType="Bit" />
+    <ElementType Name="spInsertAccountResult">
+      <Column Name="id" Type="System.Decimal" DbType="Decimal(38,0)" CanBeNull="true" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.spInsertAttributes" Method="spInsertAttributes">
+    <Parameter Name="task_id" Type="System.Int64" DbType="BigInt" />
+    <Parameter Name="attr_name" Type="System.String" DbType="NVarChar(50)" />
+    <Parameter Name="attr_value" Type="System.String" DbType="NVarChar(512)" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.spInsertTasks" Method="spInsertTasks">
+    <Parameter Name="owner" Type="System.String" DbType="NVarChar(50)" />
+    <Parameter Name="tasktype" Type="System.String" DbType="NVarChar(50)" />
+    <Parameter Name="title" Type="System.String" DbType="NVarChar(128)" />
+    <Parameter Name="status" Type="System.String" DbType="NVarChar(50)" />
+    <Parameter Name="scheduled_time" Type="System.DateTime" DbType="DateTime" />
+    <Parameter Name="frequency" Type="System.String" DbType="NVarChar(50)" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.spSelectAllAccount" Method="spSelectAllAccount">
+    <ElementType Name="spSelectAllAccountResult">
+      <Column Name="id" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="username" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="password" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="email" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="enabled" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.spSelectAllTasks" Method="spSelectAllTasks">
+    <ElementType Name="spSelectAllTasksResult">
+      <Column Name="id" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="owner" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="tasktype" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="title" Type="System.String" DbType="NVarChar(128) NOT NULL" CanBeNull="false" />
+      <Column Name="status" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="scheduled_time" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="frequency" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.spSelectByAttributesTask_id" Method="spSelectByAttributesTask_id">
+    <Parameter Name="task_id" Type="System.Int64" DbType="BigInt" />
+    <ElementType Name="spSelectByAttributesTask_idResult">
+      <Column Name="task_id" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="attr_name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="attr_value" Type="System.String" DbType="NVarChar(512) NOT NULL" CanBeNull="false" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.spSelectByTasksOwner" Method="spSelectByTasksOwner">
+    <Parameter Name="owner" Type="System.String" DbType="NVarChar(50)" />
+    <ElementType Name="spSelectByTasksOwnerResult">
+      <Column Name="id" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="owner" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="tasktype" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="title" Type="System.String" DbType="NVarChar(128) NOT NULL" CanBeNull="false" />
+      <Column Name="status" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="scheduled_time" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="frequency" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.spSelectSingleAccount" Method="spSelectSingleAccount">
+    <Parameter Name="username" Type="System.String" DbType="NVarChar(50)" />
+    <ElementType Name="spSelectSingleAccountResult">
+      <Column Name="id" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="username" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="password" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="email" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="enabled" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.spUpdateAccount" Method="spUpdateAccount">
+    <Parameter Name="id" Type="System.Int64" DbType="BigInt" />
+    <Parameter Name="username" Type="System.String" DbType="NVarChar(50)" />
+    <Parameter Name="password" Type="System.String" DbType="NVarChar(50)" />
+    <Parameter Name="email" Type="System.String" DbType="NVarChar(50)" />
+    <Parameter Name="enabled" Type="System.Boolean" DbType="Bit" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.spUpdateByTasksOwner" Method="spUpdateByTasksOwner">
+    <Parameter Name="owner" Type="System.String" DbType="NVarChar(50)" />
+    <Parameter Name="tasktype" Type="System.String" DbType="NVarChar(50)" />
+    <Parameter Name="title" Type="System.String" DbType="NVarChar(128)" />
+    <Parameter Name="status" Type="System.String" DbType="NVarChar(50)" />
+    <Parameter Name="scheduled_time" Type="System.DateTime" DbType="DateTime" />
+    <Parameter Name="frequency" Type="System.String" DbType="NVarChar(50)" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.spSelectAccountByApiKey" Method="spSelectAccountByApiKey">
+    <Parameter Name="apikey" Type="System.String" DbType="VarChar(50)" />
+    <ElementType Name="spSelectAccountByApiKeyResult">
+      <Column Name="id" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="username" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="password" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="email" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="enabled" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+    </ElementType>
+  </Function>
+</Database>
