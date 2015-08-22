@@ -31,7 +31,7 @@ namespace Portal
             var alreadyPresent = DatabaseManager.SelectSingleAccount(ctxt.Username);
             if (alreadyPresent == null)
             {
-                DatabaseManager.InsertAccount(new EmailScheduler.Model.UserContext
+                DatabaseManager.InsertAccount(new EmailScheduler.Model.UserAccount
                 {
                     email = ctxt.Email,
                     enabled = true,

@@ -12,18 +12,19 @@ namespace EmailScheduler
     {
         long Id { get; set; }
         string Title { get; set; }
-        string Status { get; set; }
+        TaskState State { get; set; }
         string TaskType { get; set; }
 
-        UserContext UserInfo { get; set; }
+        UserAccount UserInfo { get; set; }
         DateTime ScheduledTime { get; set; }
         TaskSchedule Frequency { get; set; }
         Dictionary<string, string> Attributes { get; set; }
 
-        void RunTask();
+        bool Run();
         void UpdateNextRuntime();
         void InitialiseTask(DAL.Task task);
-        void InitialisePrincipal(DAL.Account account);
+        void UpdateState(TaskState taskState);
+        void SaveTask();
     }
 
     public enum TaskSchedule
@@ -33,5 +34,12 @@ namespace EmailScheduler
         Daily = 2,
         Weekly = 3,
         Monthly = 4,
+    }
+    public enum TaskState
+    {
+        New = 0,
+        Active = 1,
+        Pending = 2,
+        Complete = 3,
     }
 }

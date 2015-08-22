@@ -54,13 +54,18 @@
     </Compile>
     <Compile Include="Helper\eMailer.cs" />
     <Compile Include="Helper\WrapperResult.cs" />
+    <Compile Include="Interface\IAccountManager.cs" />
+    <Compile Include="Interface\ITaskController.cs" />
+    <Compile Include="Interface\ITaskProvider.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Controllers\TaskController.cs" />
+    <Compile Include="Providers\TaskDBProvider.cs" />
     <Compile Include="Tasks\BasicEmailTask.cs" />
-    <Compile Include="Tasks\ITask .cs" />
+    <Compile Include="Interface\ITask .cs" />
     <Compile Include="Helper\Logger.cs" />
     <Compile Include="ProjectInstaller.cs">
       <SubType>Component</SubType>

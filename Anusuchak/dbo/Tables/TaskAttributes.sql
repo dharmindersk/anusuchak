@@ -1,4 +1,4 @@
-﻿CREATE TABLE [dbo].[Attributes] (
+﻿CREATE TABLE [dbo].[TaskAttributes] (
     [task_id]    BIGINT         NOT NULL,
     [attr_name]  NVARCHAR (50)  NOT NULL,
     [attr_value] NVARCHAR (512) NOT NULL,
